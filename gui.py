@@ -20,22 +20,24 @@ class GUI(Frame):
         self.parent.title("Sudoku")
         self.pack(fill=BOTH, expand=True)
 
-        Style().configure("TButton", padding=(0, 5, 0, 5),
-                          font='serif 16')
+        Style().configure("TButton", padding=(0, 5, 0, 5), font='serif 16')
+        Style().configure("TLabel", font='serif 16')
 
         buttons_frame = Frame(self, width=100)
         buttons_frame.pack(side=LEFT)
 
         action_button1 = Button(buttons_frame, text="Resolve", command=self.resolve)
-        action_button1.pack(side=TOP, padx=5, pady=5)
+        action_button1.pack(side=TOP, padx=5, pady=0)
         action_button2 = Button(buttons_frame, text="Deep resolve", command=self.deep_resolve)
-        action_button2.pack(side=TOP, padx=5, pady=5)
+        action_button2.pack(side=TOP, padx=5, pady=0)
         sample1_button = Button(buttons_frame, text="Sample1", command=self.sample1)
-        sample1_button.pack(side=TOP, padx=5, pady=5)
+        sample1_button.pack(side=TOP, padx=5, pady=0)
         sample2_button = Button(buttons_frame, text="Sample2", command=self.sample2)
-        sample2_button.pack(side=TOP, padx=5, pady=5)
+        sample2_button.pack(side=TOP, padx=5, pady=0)
         sample3_button = Button(buttons_frame, text="Sample3", command=self.sample3)
-        sample3_button.pack(side=TOP, padx=5, pady=5)
+        sample3_button.pack(side=TOP, padx=5, pady=0)
+        clear_button = Button(buttons_frame, text="clear", command=self.clear)
+        clear_button.pack(side=TOP, padx=5, pady=0)
 
         entries_frame = Frame(self)
         entries_frame.pack(side=LEFT)
@@ -43,11 +45,11 @@ class GUI(Frame):
         labels_frame = Frame(entries_frame)
         labels_frame.pack(side=TOP)
 
-        in_label = Label(labels_frame, width=20, text='input')
-        in_label.pack(side=LEFT, padx=70)
+        in_label = Label(labels_frame, width=10, text='input')
+        in_label.pack(side=LEFT, padx=75)
 
-        out_label = Label(labels_frame, width=20, text='output')
-        out_label.pack(side=LEFT, padx=10)
+        out_label = Label(labels_frame, width=15, text='output')
+        out_label.pack(side=LEFT, padx=0)
 
         for i in range(9):
             self.entries.append([])
@@ -61,17 +63,17 @@ class GUI(Frame):
                 entry.pack(side=LEFT, padx=0, pady=0)
                 self.entries[-1].append(entry)
                 if j % 3 == 2:
-                    pad = '          ' if j % 9 == 8 else ''
-                    empty = Label(curr_frame, text=pad)
+                    pad = '      ' if j % 9 == 8 else ' '
+                    empty = Label(curr_frame, text=pad, font='serif 10')
                     empty.pack(side=LEFT)
 
         report_frame = Frame(entries_frame)
         report_frame.pack(side=TOP)
-        self.report_label = Label(report_frame, text='result')
+        self.report_label = Label(report_frame, text='')
         self.report_label.pack(side=LEFT)
 
     def center_window(self):
-        w = 550
+        w = 565
         h = 270
 
         sw = self.parent.winfo_screenwidth()
@@ -123,6 +125,10 @@ class GUI(Frame):
         inp = self.get_from_csv(path.join('samples', 'input3.csv'))
         self.set_sample_or_response(inp, True)
 
+    def clear(self):
+        self.set_sample_or_response([[None for _ in range(9)] for _ in range(9)], False)
+        self.set_sample_or_response([[None for _ in range(9)] for _ in range(9)], True)
+
     def set_sample_or_response(self, values, is_sample=False):
         start = 0 if is_sample else 9
         for i in range(9):
@@ -156,6 +162,7 @@ class GUI(Frame):
 
 def main():
     root = Tk()
+    root.resizable(0, 0)
     app = GUI(root)
     root.mainloop()
 
